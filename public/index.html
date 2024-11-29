@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RapidLoki - File Sharing</title>
+    <style>
+        body {
+            font-family: Comic Sans MS, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .file-upload {
+            margin-bottom: 2rem;
+        }
+        .file-list {
+            margin-top: 2rem;
+        }
+        .file-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .file-list li {
+            background: #f9f9f9;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-list a {
+            text-decoration: none;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>RapidLoki</h1>
+        <p>Fast and purrfect file sharing ;3</p>
+    </header>
+    <main>
+        <div class="file-upload">
+            <h2>Upload a File</h2>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" required>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+        <div class="file-list">
+            <h2>Shared Files</h2>
+            <ul id="file-list">
+                <!-- Files will be populated here -->
+            </ul>
+        </div>
+    </main>
+    <script>
+        async function fetchFiles() {
+            const response = await fetch('/files');
+            const files = await response.json();
+
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+
+            files.forEach(file => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span>${file}</span>
+                    <a href="/uploads/${file}" download>Download</a>
+                `;
+                fileList.appendChild(listItem);
+            });
+        }
+
+        // Fetch files on page load
+        fetchFiles();
+    </script>
+</body>
+</html>
